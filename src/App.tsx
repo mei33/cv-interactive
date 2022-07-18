@@ -1,24 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { FormEvent } from 'react';
 import './App.css';
+import { Command } from './types';
+import { Result } from './components/Result/Result';
+
+export const PREFIX = '> ';
 
 function App() {
+  const [commandsList, setCommandsList] = React.useState<Command[]>([]);
+  const inputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleCommandCurrentSubmit = (event: FormEvent) => {
+    event.preventDefault();
+    const command = inputRef.current?.value ?? '';
+
+    setTimeout(() => {
+      setCommandsList([...commandsList, command]);
+    }, 500);
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section className="App__results">
+        {commandsList.map((command, index) => (
+          <Result command={command} key={index} />
+        ))}
+      </section>
+
+      <form className="App_form" onSubmit={handleCommandCurrentSubmit}>
+        <span>{PREFIX}</span>
+        <input
+          autoCorrect="off"
+          autoFocus
+          className="App__input"
+          ref={inputRef}
+          spellCheck={false}
+          type="text"
+        />
+      </form>
     </div>
   );
 }
