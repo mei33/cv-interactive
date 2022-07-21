@@ -1,5 +1,6 @@
-import React, { ChangeEvent, FormEvent } from 'react';
+import React from 'react';
 
+import { DataEntry } from './components/DataEntry/DataEntry';
 import { Result } from './components/Result/Result';
 import { PREFIX } from './constants';
 import { useKeyboard } from './hooks/useKeyboard';
@@ -18,9 +19,7 @@ function App() {
 
   useKeyboard({ commandsHistory, inputRef, lastCommand });
 
-  const handleCommandCurrentSubmit = (event: FormEvent) => {
-    event.preventDefault();
-
+  const handleCommandCurrentSubmit = () => {
     if (!inputRef.current) {
       return;
     }
@@ -42,8 +41,8 @@ function App() {
     }, 500);
   };
 
-  const handleCommandChange = (event: ChangeEvent<HTMLInputElement>) => {
-    lastCommand.current = event.target.value;
+  const handleCommandChange = (command: Command) => {
+    lastCommand.current = command;
   };
 
   return (
@@ -54,18 +53,11 @@ function App() {
         ))}
       </section>
 
-      <form className="App__form" onSubmit={handleCommandCurrentSubmit}>
-        <span>{PREFIX}</span>
-        <input
-          autoCorrect="off"
-          autoFocus
-          className="App__input"
-          ref={inputRef}
-          spellCheck={false}
-          type="text"
-          onChange={handleCommandChange}
-        />
-      </form>
+      <DataEntry
+        ref={inputRef}
+        onChange={handleCommandChange}
+        onSubmit={handleCommandCurrentSubmit}
+      />
     </div>
   );
 }
