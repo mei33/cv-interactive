@@ -1,27 +1,55 @@
-import React, { FormEvent } from 'react';
-import './App.css';
-import { Command } from './types';
-import { Result } from './components/Result/Result';
+import React, { ChangeEvent, FormEvent } from 'react';
 
-export const PREFIX = '> ';
+import { Result } from './components/Result/Result';
+import { PREFIX } from './constants';
+import { useKeyboard } from './hooks/useKeyboard';
+import { Command } from './types';
+import { saveCommands, loadCommands } from './utils/commandsStorage';
+
+import './App.css';
 
 function App() {
-  const [commandsList, setCommandsList] = React.useState<Command[]>([]);
+  const [commandsHistory, setCommandsHistory] = React.useState<Command[]>(
+    loadCommands()
+  );
+  const [commandsEntered, setCommandsEntered] = React.useState<Command[]>([]);
+  const lastCommand = React.useRef<Command>('');
   const inputRef = React.useRef<HTMLInputElement>(null);
+
+  useKeyboard({ commandsHistory, inputRef, lastCommand });
 
   const handleCommandCurrentSubmit = (event: FormEvent) => {
     event.preventDefault();
-    const command = inputRef.current?.value ?? '';
+
+    if (!inputRef.current) {
+      return;
+    }
+
+    const command = inputRef.current.value ?? '';
+    const commandsEnteredUpdated = [...commandsEntered, command];
+
+    inputRef.current.value = '';
 
     setTimeout(() => {
-      setCommandsList([...commandsList, command]);
+      setCommandsEntered(commandsEnteredUpdated);
+
+      if (command) {
+        const commandsHistoryUpdated = [...commandsHistory, command];
+
+        setCommandsHistory(commandsHistoryUpdated);
+        saveCommands(commandsHistoryUpdated);
+      }
     }, 500);
+  };
+
+  const handleCommandChange = (event: ChangeEvent<HTMLInputElement>) => {
+    lastCommand.current = event.target.value;
   };
 
   return (
     <div className="App">
       <section className="App__results">
-        {commandsList.map((command, index) => (
+        {commandsEntered.map((command, index) => (
           <Result command={command} key={index} />
         ))}
       </section>
@@ -35,6 +63,7 @@ function App() {
           ref={inputRef}
           spellCheck={false}
           type="text"
+          onChange={handleCommandChange}
         />
       </form>
     </div>

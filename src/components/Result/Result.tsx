@@ -20,6 +20,10 @@ export const Result: React.FC<Props> = ({ command }) => {
         return 'you are a guest';
       }
 
+      // case AvailableCommands.Clear: {
+      //   return 'bye!';
+      // }
+
       case AvailableCommands.Exit: {
         return 'bye!';
       }
