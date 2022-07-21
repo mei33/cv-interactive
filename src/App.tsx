@@ -26,7 +26,7 @@ function App() {
         ))}
       </section>
 
-      <form className="App_form" onSubmit={handleCommandCurrentSubmit}>
+      <form className="App__form" onSubmit={handleCommandCurrentSubmit}>
         <span>{PREFIX}</span>
         <input
           autoCorrect="off"

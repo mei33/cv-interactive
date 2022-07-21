@@ -12,7 +12,7 @@
   flex-grow: 1;
 }
 
-.App_form {
+.App__form {
   display: flex;
   align-items: center;
   color: red;
