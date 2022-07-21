@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { AvailableCommands, Command } from '../../types';
-import { PREFIX } from '../../App';
 
 import './Result.css';
+import { PREFIX } from '../../constants';
 
 type Props = {
   command: Command;
