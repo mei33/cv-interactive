@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react';
+import { forwardRef, FormEvent } from 'react';
 
 import { PREFIX } from '../../constants';
 import { Command } from '../../types';
@@ -10,7 +10,7 @@ type Props = {
   onSubmit: () => void;
 };
 
-export const DataEntry = React.forwardRef<HTMLInputElement, Props>(
+export const DataEntry = forwardRef<HTMLInputElement, Props>(
   ({ onChange, onSubmit }, ref) => {
     const handleSubmit = (event: FormEvent) => {
       event.preventDefault();

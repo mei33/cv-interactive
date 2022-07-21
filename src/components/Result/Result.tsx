@@ -1,4 +1,4 @@
-import React from 'react';
+import { FC } from 'react';
 
 import { AvailableCommands, Command } from '../../types';
 
@@ -9,7 +9,7 @@ type Props = {
   command: Command;
 };
 
-export const Result: React.FC<Props> = ({ command }) => {
+export const Result: FC<Props> = ({ command }) => {
   const renderContent = (command: Command) => {
     switch (command) {
       case '': {

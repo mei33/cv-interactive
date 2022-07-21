@@ -1,8 +1,7 @@
-import React from 'react';
+import { useRef, useState } from 'react';
 
-import { DataEntry } from './components/DataEntry/DataEntry';
-import { Result } from './components/Result/Result';
-import { PREFIX } from './constants';
+import { DataEntry } from './components/DataEntry';
+import { Result } from './components/Result';
 import { useKeyboard } from './hooks/useKeyboard';
 import { Command } from './types';
 import { saveCommands, loadCommands } from './utils/commandsStorage';
@@ -10,12 +9,12 @@ import { saveCommands, loadCommands } from './utils/commandsStorage';
 import './App.css';
 
 function App() {
-  const [commandsHistory, setCommandsHistory] = React.useState<Command[]>(
+  const [commandsHistory, setCommandsHistory] = useState<Command[]>(
     loadCommands()
   );
-  const [commandsEntered, setCommandsEntered] = React.useState<Command[]>([]);
-  const lastCommand = React.useRef<Command>('');
-  const inputRef = React.useRef<HTMLInputElement>(null);
+  const [commandsEntered, setCommandsEntered] = useState<Command[]>([]);
+  const lastCommand = useRef<Command>('');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useKeyboard({ commandsHistory, inputRef, lastCommand });
 
