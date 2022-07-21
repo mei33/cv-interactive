@@ -12,6 +12,10 @@ type Props = {
 export const Result: React.FC<Props> = ({ command }) => {
   const renderContent = (command: Command) => {
     switch (command) {
+      case '': {
+        return '';
+      }
+
       case AvailableCommands.WhoAmI: {
         return 'you are a guest';
       }
