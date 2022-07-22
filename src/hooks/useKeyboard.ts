@@ -68,6 +68,14 @@ export const useKeyboard = ({
     }
   };
 
+  useEffect(() => {
+    window.addEventListener('keydown', handleArrowKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleArrowKeyPress);
+    };
+  });
+
   const handleMultipleKeyPress = ({ key, ctrlKey, metaKey }: KeyboardEvent) => {
     if (!inputRef.current) {
       return;
@@ -90,18 +98,30 @@ export const useKeyboard = ({
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleArrowKeyPress);
-
-    return () => {
-      window.removeEventListener('keydown', handleArrowKeyPress);
-    };
-  });
-
-  useEffect(() => {
     window.addEventListener('keydown', handleMultipleKeyPress);
 
     return () => {
       window.removeEventListener('keydown', handleMultipleKeyPress);
+    };
+  });
+
+  const handleKeyPress = () => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    if (inputRef.current === document.activeElement) {
+      return;
+    }
+
+    inputRef.current.focus();
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
     };
   });
 };
