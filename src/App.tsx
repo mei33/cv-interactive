@@ -16,7 +16,7 @@ function App() {
   const lastCommand = useRef<Command>('');
   const inputRef = useRef<HTMLInputElement>(null);
 
-  useKeyboard({ commandsHistory, inputRef, lastCommand });
+  useKeyboard({ commandsHistory, inputRef, lastCommand, setCommandsEntered });
 
   const handleCommandCurrentSubmit = () => {
     if (!inputRef.current) {

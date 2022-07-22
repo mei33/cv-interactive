@@ -1,21 +1,23 @@
-import React from 'react';
+import { RefObject, MutableRefObject, useEffect, useRef } from 'react';
 
 import { Command } from '../types';
 
 type Params = {
   commandsHistory: Command[];
-  inputRef: React.RefObject<HTMLInputElement>;
-  lastCommand: React.MutableRefObject<Command>;
+  inputRef: RefObject<HTMLInputElement>;
+  lastCommand: MutableRefObject<Command>;
+  setCommandsEntered: Function;
 };
 
 export const useKeyboard = ({
   commandsHistory,
   inputRef,
   lastCommand,
+  setCommandsEntered,
 }: Params) => {
-  const seekCommandIndex = React.useRef<number | null>(null);
+  const seekCommandIndex = useRef<number | null>(null);
 
-  const handleKeyPress = (event: KeyboardEvent) => {
+  const handleArrowKeyPress = ({ key }: KeyboardEvent) => {
     if (!inputRef.current) {
       return;
     }
@@ -24,7 +26,7 @@ export const useKeyboard = ({
       return;
     }
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowUp': {
         const index = seekCommandIndex.current
           ? seekCommandIndex.current - 1
@@ -66,11 +68,40 @@ export const useKeyboard = ({
     }
   };
 
-  React.useEffect(() => {
-    window.addEventListener('keydown', handleKeyPress);
+  const handleMultipleKeyPress = ({ key, ctrlKey, metaKey }: KeyboardEvent) => {
+    if (!inputRef.current) {
+      return;
+    }
+
+    switch (key) {
+      case 'u': {
+        if (ctrlKey) {
+          inputRef.current.value = '';
+        }
+        return;
+      }
+
+      case 'k': {
+        if (metaKey) {
+          setCommandsEntered([]);
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleArrowKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleKeyPress);
+      window.removeEventListener('keydown', handleArrowKeyPress);
+    };
+  });
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleMultipleKeyPress);
+
+    return () => {
+      window.removeEventListener('keydown', handleMultipleKeyPress);
     };
   });
 };
