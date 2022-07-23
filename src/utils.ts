@@ -1,5 +1,5 @@
 import { AvailableCommands } from './constants';
-import { cv, help } from './output';
+import { contacts, cv, help } from './output';
 import { Command } from './types';
 
 export const getCommandOutput = (command: Command) => {
@@ -14,6 +14,10 @@ export const getCommandOutput = (command: Command) => {
 
     case AvailableCommands.CV: {
       return cv;
+    }
+
+    case AvailableCommands.Contacts: {
+      return contacts;
     }
 
     case AvailableCommands.Help: {

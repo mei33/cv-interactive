@@ -74,9 +74,11 @@ export const InProgress: React.FC<Props> = ({ data, onExit }) => {
       }
     >
       <div className="InProgress__scrollContainer">
-        <div className="InProgress__scrollContent" ref={handleContentRefRender}>
-          {data}
-        </div>
+        <div
+          className="InProgress__scrollContent"
+          dangerouslySetInnerHTML={{ __html: data }}
+          ref={handleContentRefRender}
+        ></div>
       </div>
     </section>
   );

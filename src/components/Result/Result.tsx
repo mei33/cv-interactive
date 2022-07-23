@@ -22,7 +22,7 @@ export const Result: FC<Props> = ({ command }) => {
   return (
     <section className="Result">
       {`${PREFIX}${command}`}
-      <div>{getCommandOutput(command)}</div>
+      <div dangerouslySetInnerHTML={{ __html: getCommandOutput(command) }} />
     </section>
   );
 };

@@ -6,6 +6,7 @@ export const LINE_HEIGHT_PX = 19;
 
 export enum AvailableCommands {
   CV = 'cv',
+  Contacts = 'contacts',
   Exit = 'exit',
   Help = 'help',
   WhoAmI = 'whoami',
