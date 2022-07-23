@@ -12,6 +12,10 @@ export const getCommandOutput = (command: Command) => {
       return help;
     }
 
+    case AvailableCommands.WhoAmI: {
+      return window.navigator.userAgent;
+    }
+
     default: {
       return '';
     }

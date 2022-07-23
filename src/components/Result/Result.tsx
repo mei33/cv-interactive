@@ -18,7 +18,7 @@ export const Result: FC<Props> = ({ command }) => {
       }
 
       case AvailableCommands.WhoAmI: {
-        return 'you are a guest';
+        return getCommandOutput(AvailableCommands.WhoAmI);
       }
 
       case AvailableCommands.Exit: {
