@@ -1,0 +1,23 @@
+.InProgress {
+  --max-height: 0;
+  --lines-scrolled: 0;
+
+  position: relative;
+  white-space: break-spaces;
+  overflow: hidden;
+  flex-grow: 1;
+  display: flex;
+  align-items: flex-end;
+}
+
+.InProgress__scrollContainer {
+  height: 100%;
+  max-height: var(--max-height);
+  overflow: hidden;
+  flex-basis: 100%;
+}
+
+.InProgress__scrollContent {
+  position: relative;
+  top: calc(var(--lines-scrolled) * var(--line-height) * -1);
+}

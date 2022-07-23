@@ -1,9 +1,10 @@
 import { FC } from 'react';
 
-import { AvailableCommands, Command } from '../../types';
+import { AvailableCommands, PREFIX } from '../../constants';
+import { Command } from '../../types';
+import { getCommandOutput } from '../../utils';
 
 import './Result.css';
-import { PREFIX } from '../../constants';
 
 type Props = {
   command: Command;
@@ -20,12 +21,16 @@ export const Result: FC<Props> = ({ command }) => {
         return 'you are a guest';
       }
 
-      // case AvailableCommands.Clear: {
-      //   return 'bye!';
-      // }
-
       case AvailableCommands.Exit: {
         return 'bye!';
+      }
+
+      case AvailableCommands.CV: {
+        return getCommandOutput(AvailableCommands.CV);
+      }
+
+      case AvailableCommands.Help: {
+        return getCommandOutput(AvailableCommands.Help);
       }
 
       default:
@@ -35,8 +40,8 @@ export const Result: FC<Props> = ({ command }) => {
 
   return (
     <section className="Result">
-      {PREFIX}
-      {renderContent(command)}
+      {`${PREFIX}${command}`}
+      <div>{renderContent(command)}</div>
     </section>
   );
 };

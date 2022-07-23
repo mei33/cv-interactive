@@ -1,12 +1,14 @@
 .DataEntry {
   --z-index-base: 0;
 
+  max-height: var(--input-height);
   display: flex;
   align-items: center;
   color: red;
 }
 
 .DataEntry__interact {
+  height: 100%;
   position: relative;
   flex-grow: 1;
 }

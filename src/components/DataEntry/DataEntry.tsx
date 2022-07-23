@@ -14,13 +14,20 @@ import { Command } from '../../types';
 import './DataEntry.css';
 
 type Props = {
+  isInProgress: boolean;
   onChange: (command: Command) => void;
   onSubmit: () => void;
 };
 
 export const DataEntry = forwardRef<HTMLInputElement, Props>(
-  ({ onChange, onSubmit }, ref) => {
+  ({ isInProgress, onChange, onSubmit }, ref) => {
     const [caretIndex, setCaretIndex] = useState(0);
+
+    const caretPosition = {
+      '--index': isInProgress ? 0 : caretIndex,
+    } as CSSProperties;
+
+    const prefix = isInProgress ? ':' : PREFIX;
 
     const handleInputEvent = <T extends HTMLInputElement>(
       event: MouseEvent<T> | FocusEvent<T> | KeyboardEvent<T>
@@ -37,13 +44,9 @@ export const DataEntry = forwardRef<HTMLInputElement, Props>(
       onSubmit();
     };
 
-    const caretPosition = {
-      '--index': caretIndex,
-    } as CSSProperties;
-
     return (
       <form className="DataEntry" onSubmit={handleSubmit}>
-        <div role="presentation">{PREFIX}</div>
+        <div role="presentation">{prefix}</div>
         <div className="DataEntry__interact">
           <div
             className="DataEntry__caret"
@@ -53,6 +56,7 @@ export const DataEntry = forwardRef<HTMLInputElement, Props>(
             m
           </div>
           <input
+            disabled={isInProgress}
             autoCorrect="off"
             autoFocus
             className="DataEntry__input"

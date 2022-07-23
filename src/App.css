@@ -1,14 +1,22 @@
 .App {
   --bg-color: black;
+  --line-height: 19px;
+  --offset-inner: 5px;
+  --input-height: var(--line-height);
+
 
   height: 100vh;
-  padding: 5px;
+  padding: var(--offset-inner);
+  overflow: auto;
+  font-family: monospace;
+  font-size: 16px;
+  line-height: var(--line-height);
   display: flex;
   flex-direction: column;
+  color: red;
   background-color: var(--bg-color);
 }
 
 .App__results {
   flex-grow: 1;
 }
-

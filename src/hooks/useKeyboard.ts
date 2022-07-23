@@ -5,6 +5,7 @@ import { Command } from '../types';
 type Params = {
   commandsHistory: Command[];
   inputRef: RefObject<HTMLInputElement>;
+  isInProgress: boolean;
   lastCommand: MutableRefObject<Command>;
   setCommandsEntered: Function;
 };
@@ -12,6 +13,7 @@ type Params = {
 export const useKeyboard = ({
   commandsHistory,
   inputRef,
+  isInProgress,
   lastCommand,
   setCommandsEntered,
 }: Params) => {
@@ -23,6 +25,10 @@ export const useKeyboard = ({
     }
 
     if (!commandsHistory.length) {
+      return;
+    }
+
+    if (isInProgress) {
       return;
     }
 
