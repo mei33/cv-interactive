@@ -9,6 +9,7 @@ export enum AvailableCommands {
   Exit = 'exit',
   Help = 'help',
   WhoAmI = 'whoami',
+  GoToSite = 'goto site',
 }
 
 export enum ScrollCommands {

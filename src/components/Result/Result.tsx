@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 import { AvailableCommands, PREFIX } from '../../constants';
 import { Command } from '../../types';
@@ -11,37 +11,18 @@ type Props = {
 };
 
 export const Result: FC<Props> = ({ command }) => {
-  const renderContent = (command: Command) => {
-    switch (command) {
-      case '': {
-        return '';
-      }
-
-      case AvailableCommands.WhoAmI: {
-        return getCommandOutput(AvailableCommands.WhoAmI);
-      }
-
-      case AvailableCommands.Exit: {
-        return 'bye!';
-      }
-
-      case AvailableCommands.CV: {
-        return getCommandOutput(AvailableCommands.CV);
-      }
-
-      case AvailableCommands.Help: {
-        return getCommandOutput(AvailableCommands.Help);
-      }
-
-      default:
-        return `command not found: ${command}`;
+  useEffect(() => {
+    if (command === AvailableCommands.GoToSite) {
+      setTimeout(() => {
+        window.location.assign('https://mei33.github.io/');
+      }, 1500);
     }
-  };
+  }, []);
 
   return (
     <section className="Result">
       {`${PREFIX}${command}`}
-      <div>{renderContent(command)}</div>
+      <div>{getCommandOutput(command)}</div>
     </section>
   );
 };

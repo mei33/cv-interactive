@@ -4,6 +4,14 @@ import { Command } from './types';
 
 export const getCommandOutput = (command: Command) => {
   switch (command) {
+    case '': {
+      return '';
+    }
+
+    case AvailableCommands.Exit: {
+      return 'bye!';
+    }
+
     case AvailableCommands.CV: {
       return cv;
     }
@@ -16,8 +24,11 @@ export const getCommandOutput = (command: Command) => {
       return window.navigator.userAgent;
     }
 
-    default: {
-      return '';
+    case AvailableCommands.GoToSite: {
+      return 'redirecting...';
     }
+
+    default:
+      return `command not found: ${command}`;
   }
 };
