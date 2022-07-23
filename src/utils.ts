@@ -25,7 +25,7 @@ export const getCommandOutput = (command: Command): string => {
     }
 
     case AvailableCommands.GoToSite: {
-      return 'redirecting...';
+      return 'redirecting…';
     }
 
     case AvailableCommands.Help: {
