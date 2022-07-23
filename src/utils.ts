@@ -1,8 +1,8 @@
-import { AvailableCommands } from './constants';
+import { AvailableCommands, commandsDescription } from './constants';
 import { contacts, cv, help } from './output';
 import { Command } from './types';
 
-export const getCommandOutput = (command: Command) => {
+export const getCommandOutput = (command: Command): string => {
   switch (command) {
     case '': {
       return '';
@@ -20,16 +20,18 @@ export const getCommandOutput = (command: Command) => {
       return contacts;
     }
 
-    case AvailableCommands.Help: {
-      return help;
-    }
-
     case AvailableCommands.WhoAmI: {
       return window.navigator.userAgent;
     }
 
     case AvailableCommands.GoToSite: {
       return 'redirecting...';
+    }
+
+    case AvailableCommands.Help: {
+      return Object.entries(commandsDescription)
+        .map(([key, value]) => `${key} - ${value}`)
+        .join('\n');
     }
 
     default:
