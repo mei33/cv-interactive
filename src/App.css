@@ -13,7 +13,7 @@
   line-height: var(--line-height);
   display: flex;
   flex-direction: column;
-  color: red;
+  color: green;
   background-color: var(--bg-color);
 }
 

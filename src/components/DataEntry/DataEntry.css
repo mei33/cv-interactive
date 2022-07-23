@@ -4,7 +4,6 @@
   max-height: var(--input-height);
   display: flex;
   align-items: center;
-  color: red;
 }
 
 .DataEntry__interact {
