@@ -2,9 +2,11 @@ import { CSSProperties, useEffect, useRef, useState } from 'react';
 
 import { DataEntry } from './components/DataEntry';
 import { InProgress } from './components/InProgress/InProgress';
+import { OffScreen } from './components/OffScreen/OffScreen';
 import { Result } from './components/Result';
 import { AvailableCommands, LINE_HEIGHT_PX } from './constants';
 import { useKeyboard } from './hooks/useKeyboard';
+import { siteUrl } from './output';
 import { Command } from './types';
 import { getCommandOutput } from './utils';
 import { saveCommands, loadCommands } from './utils/commandsStorage';
@@ -70,6 +72,24 @@ function App() {
     if (commandsEntered.length || !isCommandInProgress) {
       scrollToBottom();
     }
+
+    const lastCommand = commandsEntered[commandsEntered.length - 1];
+
+    switch (lastCommand) {
+      case AvailableCommands.GoToSite: {
+        setTimeout(() => {
+          window.location.assign(siteUrl);
+        }, 1500);
+        return;
+      }
+
+      case AvailableCommands.Exit: {
+        setTimeout(() => {
+          setIsOff(true);
+        }, 1500);
+        return;
+      }
+    }
   }, [commandsEntered, isCommandInProgress]);
 
   const handleCommandChange = (command: Command) => {
@@ -81,7 +101,7 @@ function App() {
   };
 
   if (isOff) {
-    return null;
+    return <OffScreen />;
   }
 
   return (

@@ -1,5 +1,8 @@
+export const siteUrl = 'https://mei33.github.io/';
+
 export const contacts = `<a href="mailto:mei33.post@gmail.com">mei33.post@gmail.com</a>
 <a target='_blank' href="//t.me/mei33">mei33@telegram</a>
+<a target='_blank' href=${siteUrl}>mei33.github.io</a>
 <a target='_blank' href="//github.com/mei33">github.com/mei33</a>
 <a target='_blank' href="//hackerrank.com/mei33">hackerrank.com/mei33</a>
 <a target='_blank' href="//linkedin.com/in/mei33">linkedin.com/in/mei33</a>
