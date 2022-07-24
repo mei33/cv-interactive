@@ -1,10 +1,10 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
 
-import { DataEntry } from './components/DataEntry';
+import { DataEntry, Ref } from './components/DataEntry';
 import { InProgress } from './components/InProgress/InProgress';
 import { OffScreen } from './components/OffScreen/OffScreen';
 import { Result } from './components/Result';
-import { AvailableCommands, LINE_HEIGHT_PX } from './constants';
+import { AvailableCommands, LINE_HEIGHT_PX, SeekCommands } from './constants';
 import { useKeyboard } from './hooks/useKeyboard';
 import { siteUrl } from './output';
 import { Command } from './types';
@@ -19,17 +19,94 @@ function App() {
   );
   const [commandsEntered, setCommandsEntered] = useState<Command[]>([]);
   const [isCommandInProgress, setIsCommandInProgress] = useState(false);
-  const [isOff, setIsOff] = useState(false);
   const lastCommand = useRef<Command>('');
+  const seekCommandIndex = useRef<number | null>(null);
+
+  const [isOff, setIsOff] = useState(false);
+
   const containerRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const entryRef = useRef<Ref>({
+    form: () => null,
+    input: () => null,
+    caret: () => null,
+  });
+
+  const handleCommandReset = () => {
+    entryRef.current.form()?.reset();
+  };
+
+  const handleCommandSeek = (direction: SeekCommands) => {
+    if (!commandsHistory.length) {
+      return;
+    }
+
+    entryRef.current.caret(12);
+
+    const input = entryRef.current.input();
+    const setCaret = entryRef.current.caret;
+
+    if (!input || !setCaret) {
+      return;
+    }
+
+    switch (direction) {
+      case SeekCommands.Prev: {
+        const index = seekCommandIndex.current
+          ? seekCommandIndex.current - 1
+          : commandsHistory.length - 1;
+
+        const indexToSet = index < 0 ? commandsHistory.length - 1 : index;
+        const commandToSet = commandsHistory[indexToSet];
+
+        input.value = commandToSet;
+        setCaret(commandToSet.length);
+
+        seekCommandIndex.current = index;
+        return;
+      }
+
+      case SeekCommands.Next: {
+        if (seekCommandIndex.current === null) {
+          return;
+        }
+
+        const index = seekCommandIndex.current + 1;
+        const isIndexValid = index < commandsHistory.length;
+
+        const commandToSet = isIndexValid
+          ? commandsHistory[index]
+          : lastCommand.current;
+
+        input.value = commandToSet;
+        setCaret(commandToSet.length);
+
+        if (isIndexValid) {
+          seekCommandIndex.current = index;
+        }
+
+        return;
+      }
+    }
+  };
+
+  const handleInput = () => {
+    if (entryRef.current.input() === document.activeElement) {
+      return;
+    }
+
+    entryRef.current.input()?.focus();
+  };
+
+  const handleCommandsListClear = () => {
+    setCommandsEntered([]);
+  };
 
   useKeyboard({
-    commandsHistory,
-    inputRef,
     isInProgress: isCommandInProgress,
-    lastCommand,
-    setCommandsEntered,
+    onCommandsListClear: handleCommandsListClear,
+    onInput: handleInput,
+    onCommandReset: handleCommandReset,
+    onCommandSeek: handleCommandSeek,
   });
 
   const scrollToBottom = () => {
@@ -41,14 +118,15 @@ function App() {
   };
 
   const handleCommandCurrentSubmit = () => {
-    if (!inputRef.current) {
+    const input = entryRef.current.input();
+    if (!input) {
       return;
     }
 
-    const command = inputRef.current.value ?? '';
+    const command = input.value ?? '';
     const commandsEnteredUpdated = [...commandsEntered, command];
 
-    inputRef.current.value = '';
+    handleCommandReset();
 
     setTimeout(() => {
       scrollToBottom();
@@ -126,10 +204,10 @@ function App() {
       )}
 
       <DataEntry
-        ref={inputRef}
+        isInProgress={isCommandInProgress}
+        ref={entryRef}
         onChange={handleCommandChange}
         onSubmit={handleCommandCurrentSubmit}
-        isInProgress={isCommandInProgress}
       />
     </div>
   );

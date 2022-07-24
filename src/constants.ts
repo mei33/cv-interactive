@@ -28,3 +28,8 @@ export enum ScrollCommands {
   Down = 'down',
   Exit = 'exit',
 }
+
+export enum SeekCommands {
+  Prev = 'prev',
+  Next = 'next',
+}

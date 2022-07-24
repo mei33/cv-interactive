@@ -13,16 +13,25 @@
 }
 
 .DataEntry__caret {
-  --width: 10px;
   --index: 0;
 
   height: 100%;
   position: absolute;
   top: 0;
-  left: calc(var(--index) * var(--width));
   z-index: var(--z-index-base);
-  background: green;
+  background-color: green;
   color: transparent;
+  transform: translateX(calc(var(--index) * 100%));
+  animation-name: blink;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(2);
+}
+
+@keyframes blink {
+  from {
+    opacity: 0;
+  }
 }
 
 .DataEntry__input {
@@ -35,7 +44,7 @@
   position: relative;
   color: inherit;
   background-color: inherit;
-  caret-color: green;
+  caret-color: transparent;
   font-family: monospace;
   font-size: inherit;
 }

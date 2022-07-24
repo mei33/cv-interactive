@@ -1,10 +1,13 @@
 import {
+  ChangeEvent,
   CSSProperties,
   FocusEvent,
   FormEvent,
   forwardRef,
   KeyboardEvent,
   MouseEvent,
+  useImperativeHandle,
+  useRef,
   useState,
 } from 'react';
 
@@ -19,9 +22,30 @@ type Props = {
   onSubmit: () => void;
 };
 
-export const DataEntry = forwardRef<HTMLInputElement, Props>(
+export type Ref = {
+  form(): HTMLFormElement | null;
+  input(): HTMLInputElement | null;
+  caret(index: number): void;
+};
+
+export const DataEntry = forwardRef<Ref, Props>(
   ({ isInProgress, onChange, onSubmit }, ref) => {
+    const formRef = useRef<HTMLFormElement>(null);
+    const inputRef = useRef<HTMLInputElement>(null);
+
     const [caretIndex, setCaretIndex] = useState(0);
+
+    useImperativeHandle(ref, () => ({
+      form() {
+        return formRef.current;
+      },
+      input() {
+        return inputRef.current;
+      },
+      caret(index: number) {
+        setCaretIndex(index);
+      },
+    }));
 
     const caretPosition = {
       '--index': isInProgress ? 0 : caretIndex,
@@ -30,7 +54,7 @@ export const DataEntry = forwardRef<HTMLInputElement, Props>(
     const prefix = isInProgress ? ':' : PREFIX;
 
     const handleInputEvent = <T extends HTMLInputElement>(
-      event: MouseEvent<T> | FocusEvent<T> | KeyboardEvent<T>
+      event: MouseEvent<T> | FocusEvent<T> | KeyboardEvent<T> | ChangeEvent<T>
     ) => {
       const target: HTMLInputElement = event.target as HTMLInputElement;
 
@@ -39,13 +63,27 @@ export const DataEntry = forwardRef<HTMLInputElement, Props>(
       }
     };
 
+    const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+      handleInputEvent(event);
+      onChange(event.target.value);
+    };
+
     const handleSubmit = (event: FormEvent) => {
       event.preventDefault();
       onSubmit();
     };
 
+    const handleReset = () => {
+      setCaretIndex(0);
+    };
+
     return (
-      <form className="DataEntry" onSubmit={handleSubmit}>
+      <form
+        className="DataEntry"
+        ref={formRef}
+        onSubmit={handleSubmit}
+        onReset={handleReset}
+      >
         <div role="presentation">{prefix}</div>
         <div className="DataEntry__interact">
           <div
@@ -60,14 +98,13 @@ export const DataEntry = forwardRef<HTMLInputElement, Props>(
             autoCorrect="off"
             autoFocus
             className="DataEntry__input"
-            ref={ref}
+            ref={inputRef}
             spellCheck={false}
             type="text"
-            onChange={({ target }) => onChange(target.value)}
+            onChange={handleChange}
             onClick={handleInputEvent}
             onContextMenu={handleInputEvent}
             onFocus={handleInputEvent}
-            onKeyDown={handleInputEvent}
           />
         </div>
       </form>
