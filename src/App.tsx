@@ -1,11 +1,7 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
-
-import { DataEntry, Ref } from './components/DataEntry';
-import { InProgress } from './components/InProgress/InProgress';
-import { OffScreen } from './components/OffScreen/OffScreen';
-import { Result } from './components/Result';
+import { DataEntry, Ref, InProgress, OffScreen, Result } from './components';
 import { AvailableCommands, LINE_HEIGHT_PX, SeekCommands } from './constants';
-import { useKeyboard } from './hooks/useKeyboard';
+import { useKeyboardHotkeys } from './hooks';
 import { siteUrl } from './output';
 import { Command } from './types';
 import { getCommandOutput } from './utils';
@@ -101,8 +97,8 @@ function App() {
     setCommandsEntered([]);
   };
 
-  useKeyboard({
-    isInProgress: isCommandInProgress,
+  useKeyboardHotkeys({
+    isCommandInProgress,
     onCommandsListClear: handleCommandsListClear,
     onInput: handleInput,
     onCommandReset: handleCommandReset,
@@ -204,7 +200,7 @@ function App() {
       )}
 
       <DataEntry
-        isInProgress={isCommandInProgress}
+        isCommandInProgress={isCommandInProgress}
         ref={entryRef}
         onChange={handleCommandChange}
         onSubmit={handleCommandCurrentSubmit}

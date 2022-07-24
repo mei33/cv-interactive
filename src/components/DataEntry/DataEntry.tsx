@@ -17,7 +17,7 @@ import { Command } from '../../types';
 import './DataEntry.css';
 
 type Props = {
-  isInProgress: boolean;
+  isCommandInProgress: boolean;
   onChange: (command: Command) => void;
   onSubmit: () => void;
 };
@@ -29,7 +29,7 @@ export type Ref = {
 };
 
 export const DataEntry = forwardRef<Ref, Props>(
-  ({ isInProgress, onChange, onSubmit }, ref) => {
+  ({ isCommandInProgress, onChange, onSubmit }, ref) => {
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -48,10 +48,10 @@ export const DataEntry = forwardRef<Ref, Props>(
     }));
 
     const caretPosition = {
-      '--index': isInProgress ? 0 : caretIndex,
+      '--index': isCommandInProgress ? 0 : caretIndex,
     } as CSSProperties;
 
-    const prefix = isInProgress ? ':' : PREFIX;
+    const prefix = isCommandInProgress ? ':' : PREFIX;
 
     const handleInputEvent = <T extends HTMLInputElement>(
       event: MouseEvent<T> | FocusEvent<T> | KeyboardEvent<T> | ChangeEvent<T>
@@ -94,7 +94,7 @@ export const DataEntry = forwardRef<Ref, Props>(
             m
           </div>
           <input
-            disabled={isInProgress}
+            disabled={isCommandInProgress}
             autoCorrect="off"
             autoFocus
             className="DataEntry__input"

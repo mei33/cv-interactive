@@ -3,22 +3,22 @@ import { useEffect } from 'react';
 import { SeekCommands } from '../constants';
 
 type Params = {
-  isInProgress: boolean;
+  isCommandInProgress: boolean;
   onCommandsListClear(): void;
   onInput(): void;
   onCommandReset(): void;
   onCommandSeek(direction: SeekCommands): void;
 };
 
-export const useKeyboard = ({
-  isInProgress,
+export const useKeyboardHotkeys = ({
+  isCommandInProgress,
   onCommandsListClear,
   onCommandSeek,
   onInput,
   onCommandReset,
 }: Params) => {
   const handleArrowKeyPress = ({ key }: KeyboardEvent) => {
-    if (isInProgress) {
+    if (isCommandInProgress) {
       return;
     }
 
@@ -44,7 +44,7 @@ export const useKeyboard = ({
   }, []);
 
   const handleMultipleKeyPress = ({ key, ctrlKey, metaKey }: KeyboardEvent) => {
-    if (isInProgress) {
+    if (isCommandInProgress) {
       return;
     }
 
@@ -73,7 +73,7 @@ export const useKeyboard = ({
   });
 
   const handleKeyPress = () => {
-    if (isInProgress) {
+    if (isCommandInProgress) {
       return;
     }
 

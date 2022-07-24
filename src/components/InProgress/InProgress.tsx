@@ -1,7 +1,7 @@
 import React, { CSSProperties, useRef, useState } from 'react';
 
 import { LINE_HEIGHT_PX, ScrollCommands } from '../../constants';
-import { useKeyboardScroll } from '../../hooks/useKeyboardScroll';
+import { useKeyboardScroll } from '../../hooks';
 
 import './InProgress.css';
 

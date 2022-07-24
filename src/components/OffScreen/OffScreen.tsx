@@ -1,7 +1,7 @@
-import React from 'react';
+import { FC } from 'react';
 
 import './OffScreen.css';
 
-export const OffScreen: React.FC = () => (
+export const OffScreen: FC = () => (
   <div className="OffScreen">It's now safe to turn off your computer</div>
 );
