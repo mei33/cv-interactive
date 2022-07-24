@@ -1,26 +1,35 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
-import { DataEntry, InProgress, OffScreen, Ref, Result } from './components';
+import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  DataEntry,
+  InProgress,
+  OffScreen,
+  Ref,
+  Result,
+  Suggestions,
+} from './components';
 import {
   AvailableCommands,
   CaretCommands,
   LINE_HEIGHT_PX,
+  Mode,
   SeekCommands,
   Theme,
 } from './constants';
 import { useKeyboardHotkeys } from './hooks';
 import { siteUrl } from './output';
 import { Command } from './types';
-import { getCommandOutput } from './utils';
-import { loadCommands, saveCommands } from './utils';
+import { getCommandOutput, loadCommands, saveCommands } from './utils';
 
 import './App.css';
 
 function App() {
+  const [mode, setMode] = useState(Mode.Input);
+
   const [commandsHistory, setCommandsHistory] = useState<Command[]>(
     loadCommands()
   );
   const [commandsEntered, setCommandsEntered] = useState<Command[]>([]);
-  const [isCommandInProgress, setIsCommandInProgress] = useState(false);
+  const [suggestionsList, setSuggestionsList] = useState<Command[]>([]);
   const lastCommand = useRef<Command>('');
   const seekCommandIndex = useRef<number | null>(null);
 
@@ -36,8 +45,11 @@ function App() {
 
   const [theme, setTheme] = useState<Theme>(Theme.Dark);
 
+  const isCommandInProgress = useMemo(() => mode === Mode.Output, [mode]);
+
   const handleCommandReset = () => {
     entryRef.current.form()?.reset();
+    setSuggestionsList([]);
   };
 
   const handleCommandSeek = (direction: SeekCommands) => {
@@ -132,6 +144,22 @@ function App() {
     }
   };
 
+  const handleCommandSuggest = () => {
+    const input = entryRef.current.input();
+
+    if (!input || !input.value) {
+      return;
+    }
+
+    const suggestions = Object.values(AvailableCommands).filter((cmd) =>
+      cmd.startsWith(input.value)
+    );
+
+    setSuggestionsList(suggestions);
+
+    setMode(suggestions.length ? Mode.Suggestion : Mode.Input);
+  };
+
   useKeyboardHotkeys({
     isCommandInProgress,
     onCommandsListClear: handleCommandsListClear,
@@ -139,6 +167,7 @@ function App() {
     onCaretMove: handleCaretMove,
     onCommandReset: handleCommandReset,
     onCommandSeek: handleCommandSeek,
+    onCommandSuggest: handleCommandSuggest,
   });
 
   const scrollToBottom = () => {
@@ -164,7 +193,7 @@ function App() {
       scrollToBottom();
 
       if (command === AvailableCommands.CV) {
-        setIsCommandInProgress(true);
+        setMode(Mode.Output);
       }
 
       setCommandsEntered(commandsEnteredUpdated);
@@ -179,7 +208,7 @@ function App() {
   };
 
   useEffect(() => {
-    if (commandsEntered.length || !isCommandInProgress) {
+    if (commandsEntered.length || mode === Mode.Input) {
       scrollToBottom();
     }
 
@@ -213,7 +242,7 @@ function App() {
   };
 
   const handleInProgressModeExit = () => {
-    setIsCommandInProgress(false);
+    setMode(Mode.Input);
   };
 
   if (isOff) {
@@ -247,6 +276,8 @@ function App() {
         onChange={handleCommandChange}
         onSubmit={handleCommandCurrentSubmit}
       />
+
+      {mode === Mode.Suggestion && <Suggestions commands={suggestionsList} />}
     </div>
   );
 }

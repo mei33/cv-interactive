@@ -7,8 +7,9 @@ type Params = {
   onCommandsListClear(): void;
   onInput(): void;
   onCaretMove(direction: CaretCommands): void;
-  onCommandSeek(direction: SeekCommands): void;
   onCommandReset(): void;
+  onCommandSeek(direction: SeekCommands): void;
+  onCommandSuggest(): void;
 };
 
 export const useKeyboardHotkeys = ({
@@ -18,8 +19,9 @@ export const useKeyboardHotkeys = ({
   onInput,
   onCaretMove,
   onCommandReset,
+  onCommandSuggest,
 }: Params) => {
-  const handleArrowKeyPress = ({ key }: KeyboardEvent) => {
+  const handleNavigationKeyPress = ({ key }: KeyboardEvent) => {
     if (isCommandInProgress) {
       return;
     }
@@ -40,14 +42,19 @@ export const useKeyboardHotkeys = ({
         onCaretMove(direction);
         return;
       }
+
+      case 'Tab': {
+        onCommandSuggest();
+        return;
+      }
     }
   };
 
   useEffect(() => {
-    window.addEventListener('keydown', handleArrowKeyPress);
+    window.addEventListener('keydown', handleNavigationKeyPress);
 
     return () => {
-      window.removeEventListener('keydown', handleArrowKeyPress);
+      window.removeEventListener('keydown', handleNavigationKeyPress);
     };
   }, []);
 
