@@ -1,13 +1,14 @@
 import { useEffect } from 'react';
 
-import { SeekCommands } from '../constants';
+import { CaretCommands, SeekCommands } from '../constants';
 
 type Params = {
   isCommandInProgress: boolean;
   onCommandsListClear(): void;
   onInput(): void;
-  onCommandReset(): void;
+  onCaretMove(direction: CaretCommands): void;
   onCommandSeek(direction: SeekCommands): void;
+  onCommandReset(): void;
 };
 
 export const useKeyboardHotkeys = ({
@@ -15,6 +16,7 @@ export const useKeyboardHotkeys = ({
   onCommandsListClear,
   onCommandSeek,
   onInput,
+  onCaretMove,
   onCommandReset,
 }: Params) => {
   const handleArrowKeyPress = ({ key }: KeyboardEvent) => {
@@ -23,13 +25,19 @@ export const useKeyboardHotkeys = ({
     }
 
     switch (key) {
-      case 'ArrowUp': {
-        onCommandSeek(SeekCommands.Prev);
+      case 'ArrowUp':
+      case 'ArrowDown': {
+        const direction =
+          key === 'ArrowUp' ? SeekCommands.Prev : SeekCommands.Next;
+        onCommandSeek(direction);
         return;
       }
 
-      case 'ArrowDown': {
-        onCommandSeek(SeekCommands.Next);
+      case 'ArrowLeft':
+      case 'ArrowRight': {
+        const direction =
+          key === 'ArrowLeft' ? CaretCommands.Prev : CaretCommands.Next;
+        onCaretMove(direction);
         return;
       }
     }

@@ -2,6 +2,7 @@ import { CSSProperties, useEffect, useRef, useState } from 'react';
 import { DataEntry, InProgress, OffScreen, Ref, Result } from './components';
 import {
   AvailableCommands,
+  CaretCommands,
   LINE_HEIGHT_PX,
   SeekCommands,
   Theme,
@@ -10,7 +11,7 @@ import { useKeyboardHotkeys } from './hooks';
 import { siteUrl } from './output';
 import { Command } from './types';
 import { getCommandOutput } from './utils';
-import { loadCommands, saveCommands } from './utils/commandsStorage';
+import { loadCommands, saveCommands } from './utils';
 
 import './App.css';
 
@@ -29,7 +30,8 @@ function App() {
   const entryRef = useRef<Ref>({
     form: () => null,
     input: () => null,
-    caret: () => null,
+    caretGet: () => 0,
+    caretSet: () => null,
   });
 
   const [theme, setTheme] = useState<Theme>(Theme.Dark);
@@ -43,10 +45,8 @@ function App() {
       return;
     }
 
-    entryRef.current.caret(12);
-
     const input = entryRef.current.input();
-    const setCaret = entryRef.current.caret;
+    const setCaret = entryRef.current.caretSet;
 
     if (!input || !setCaret) {
       return;
@@ -104,10 +104,39 @@ function App() {
     setCommandsEntered([]);
   };
 
+  const handleCaretMove = (direction: CaretCommands) => {
+    const caretIndexCurrent = entryRef.current.caretGet();
+
+    switch (direction) {
+      case CaretCommands.Prev: {
+        if (caretIndexCurrent) {
+          entryRef.current.caretSet(caretIndexCurrent - 1);
+        }
+        return;
+      }
+
+      case CaretCommands.Next: {
+        const input = entryRef.current.input();
+
+        if (!input) {
+          return;
+        }
+
+        const indexNext = caretIndexCurrent + 1;
+
+        if (indexNext <= input.value.length) {
+          entryRef.current.caretSet(indexNext);
+        }
+        return;
+      }
+    }
+  };
+
   useKeyboardHotkeys({
     isCommandInProgress,
     onCommandsListClear: handleCommandsListClear,
     onInput: handleInput,
+    onCaretMove: handleCaretMove,
     onCommandReset: handleCommandReset,
     onCommandSeek: handleCommandSeek,
   });

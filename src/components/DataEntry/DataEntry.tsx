@@ -22,10 +22,13 @@ type Props = {
   onSubmit: () => void;
 };
 
+type CaretIndex = number;
+
 export type Ref = {
   form(): HTMLFormElement | null;
   input(): HTMLInputElement | null;
-  caret(index: number): void;
+  caretSet(index: CaretIndex): void;
+  caretGet(): CaretIndex;
 };
 
 export const DataEntry = forwardRef<Ref, Props>(
@@ -33,7 +36,7 @@ export const DataEntry = forwardRef<Ref, Props>(
     const formRef = useRef<HTMLFormElement>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const [caretIndex, setCaretIndex] = useState(0);
+    const [caretIndex, setCaretIndex] = useState<CaretIndex>(0);
 
     useImperativeHandle(ref, () => ({
       form() {
@@ -42,8 +45,11 @@ export const DataEntry = forwardRef<Ref, Props>(
       input() {
         return inputRef.current;
       },
-      caret(index: number) {
+      caretSet(index: number) {
         setCaretIndex(index);
+      },
+      caretGet() {
+        return caretIndex;
       },
     }));
 

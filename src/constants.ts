@@ -36,6 +36,11 @@ export enum SeekCommands {
   Next = 'next',
 }
 
+export enum CaretCommands {
+  Prev = 'prev',
+  Next = 'next',
+}
+
 export enum Theme {
   Dark = 'dark',
   Light = 'light',
