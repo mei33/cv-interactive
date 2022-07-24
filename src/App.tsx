@@ -1,11 +1,16 @@
 import { CSSProperties, useEffect, useRef, useState } from 'react';
-import { DataEntry, Ref, InProgress, OffScreen, Result } from './components';
-import { AvailableCommands, LINE_HEIGHT_PX, SeekCommands } from './constants';
+import { DataEntry, InProgress, OffScreen, Ref, Result } from './components';
+import {
+  AvailableCommands,
+  LINE_HEIGHT_PX,
+  SeekCommands,
+  Theme,
+} from './constants';
 import { useKeyboardHotkeys } from './hooks';
 import { siteUrl } from './output';
 import { Command } from './types';
 import { getCommandOutput } from './utils';
-import { saveCommands, loadCommands } from './utils/commandsStorage';
+import { loadCommands, saveCommands } from './utils/commandsStorage';
 
 import './App.css';
 
@@ -26,6 +31,8 @@ function App() {
     input: () => null,
     caret: () => null,
   });
+
+  const [theme, setTheme] = useState<Theme>(Theme.Dark);
 
   const handleCommandReset = () => {
     entryRef.current.form()?.reset();
@@ -163,6 +170,12 @@ function App() {
         }, 1500);
         return;
       }
+
+      case AvailableCommands.ThemeChange: {
+        const themeUpdated = theme === Theme.Light ? Theme.Dark : Theme.Light;
+
+        setTheme(themeUpdated);
+      }
     }
   }, [commandsEntered, isCommandInProgress]);
 
@@ -180,7 +193,7 @@ function App() {
 
   return (
     <div
-      className="App"
+      className={`App App--${theme}`}
       ref={containerRef}
       style={{ '--line-height': `${LINE_HEIGHT_PX}px` } as CSSProperties}
     >

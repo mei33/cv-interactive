@@ -11,6 +11,7 @@ export enum AvailableCommands {
   Help = 'help',
   WhoAmI = 'whoami',
   GoToSite = 'goto site',
+  ThemeChange = 'theme change',
 }
 
 export const commandsDescription: Record<AvailableCommands, string> = {
@@ -20,6 +21,7 @@ export const commandsDescription: Record<AvailableCommands, string> = {
   [AvailableCommands.WhoAmI]:
     'shows some info about your browser (just for fun)',
   [AvailableCommands.GoToSite]: 'redirects to Web 2.0 site',
+  [AvailableCommands.ThemeChange]: 'switches between dark/light themes',
   [AvailableCommands.Help]: 'shows this message :-)',
 };
 
@@ -32,4 +34,9 @@ export enum ScrollCommands {
 export enum SeekCommands {
   Prev = 'prev',
   Next = 'next',
+}
+
+export enum Theme {
+  Dark = 'dark',
+  Light = 'light',
 }

@@ -1,9 +1,9 @@
 .App {
-  --bg-color: black;
+  --bg-color: initial;
+  --color: initial;
   --line-height: 19px;
   --offset-inner: 5px;
   --input-height: var(--line-height);
-
 
   height: 100vh;
   padding: var(--offset-inner);
@@ -13,10 +13,34 @@
   line-height: var(--line-height);
   display: flex;
   flex-direction: column;
-  color: green;
+  color: var(--color);
   background-color: var(--bg-color);
 }
 
 .App__results {
   flex-grow: 1;
+}
+
+@media (prefers-color-scheme: dark) {
+  .App {
+    --bg-color: black;
+    --color: green;
+  }
+
+  .App.App--light {
+    --bg-color: white;
+    --color: black;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .App {
+    --bg-color: white;
+    --color: black;
+  }
+
+  .App.App--dark {
+    --bg-color: black;
+    --color: green;
+  }
 }

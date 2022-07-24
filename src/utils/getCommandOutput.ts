@@ -1,6 +1,6 @@
-import { AvailableCommands, commandsDescription } from './constants';
-import { contacts, cv, help } from './output';
-import { Command } from './types';
+import { AvailableCommands, commandsDescription } from '../constants';
+import { contacts, cv } from '../output';
+import { Command } from '../types';
 
 export const getCommandOutput = (command: Command): string => {
   switch (command) {
@@ -32,6 +32,10 @@ export const getCommandOutput = (command: Command): string => {
       return Object.entries(commandsDescription)
         .map(([key, value]) => `${key} - ${value}`)
         .join('\n');
+    }
+
+    case AvailableCommands.ThemeChange: {
+      return `Whoa! Look at these colors!`;
     }
 
     default:

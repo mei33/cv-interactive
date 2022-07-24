@@ -19,7 +19,7 @@
   position: absolute;
   top: 0;
   z-index: var(--z-index-base);
-  background-color: green;
+  background-color: var(--color);
   color: transparent;
   transform: translateX(calc(var(--index) * 100%));
   animation-name: blink;
