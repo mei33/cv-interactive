@@ -31,6 +31,14 @@ export const commandsDescription: Record<AvailableCommands, string> = {
   [AvailableCommands.Help]: 'shows this message :-)',
 };
 
+export const hotkeysDescription = `
+← → – to move caret
+↑ ↓ – to seek previously entered command
+Tab - to get list of suggested commands based on input
+⌘ + U - to remove entered command
+⌘ + K - to clear history of entered commands
+`;
+
 export enum ScrollCommands {
   Up = 'up',
   Down = 'down',

@@ -1,4 +1,8 @@
-import { AvailableCommands, commandsDescription } from '../constants';
+import {
+  AvailableCommands,
+  commandsDescription,
+  hotkeysDescription,
+} from '../constants';
 import { contacts, cv } from '../output';
 import { Command } from '../types';
 
@@ -29,9 +33,11 @@ export const getCommandOutput = (command: Command): string => {
     }
 
     case AvailableCommands.Help: {
-      return Object.entries(commandsDescription)
-        .map(([key, value]) => `${key} - ${value}`)
-        .join('\n');
+      return (
+        Object.entries(commandsDescription)
+          .map(([key, value]) => `${key} – ${value}`)
+          .join('\n') + `\n${hotkeysDescription}\n`
+      );
     }
 
     case AvailableCommands.ThemeChange: {
