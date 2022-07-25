@@ -8,6 +8,7 @@
   height: 100vh;
   padding: var(--offset-inner);
   overflow: auto;
+  scrollbar-gutter: stable;
   font-family: monospace;
   font-size: 16px;
   line-height: var(--line-height);
