@@ -1,0 +1,16 @@
+.Help {
+  --size: 50px;
+
+  width: var(--size);
+  height: var(--size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  background: saddlebrown;
+  color: white;
+  font-size: calc(var(--size) / 2);
+  line-height: 1;
+}

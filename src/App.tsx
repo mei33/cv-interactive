@@ -1,6 +1,7 @@
 import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
 import {
   DataEntry,
+  Help,
   InProgress,
   OffScreen,
   Ref,
@@ -28,7 +29,9 @@ function App() {
   const [commandsHistory, setCommandsHistory] = useState<Command[]>(
     loadCommands()
   );
-  const [commandsEntered, setCommandsEntered] = useState<Command[]>([]);
+  const [commandsEntered, setCommandsEntered] = useState<Command[]>([
+    AvailableCommands.Help,
+  ]);
   const [suggestionsList, setSuggestionsList] = useState<Command[]>([]);
   const lastCommand = useRef<Command>('');
   const seekCommandIndex = useRef<number | null>(null);
@@ -255,6 +258,8 @@ function App() {
       ref={containerRef}
       style={{ '--line-height': `${LINE_HEIGHT_PX}px` } as CSSProperties}
     >
+      <Help className="App__tooltip" />
+
       {!isCommandInProgress && (
         <section className="App__results">
           {commandsEntered.map((command, index) => (

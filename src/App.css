@@ -22,6 +22,14 @@
   flex-grow: 1;
 }
 
+.App__tooltip {
+  --offset: 50px;
+
+  position: fixed;
+  top: var(--offset);
+  right: var(--offset);
+}
+
 @media (prefers-color-scheme: dark) {
   .App {
     --bg-color: black;
