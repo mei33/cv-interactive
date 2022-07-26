@@ -155,7 +155,7 @@ function App() {
     }
 
     const suggestions = Object.values(AvailableCommands).filter((cmd) =>
-      cmd.startsWith(input.value)
+      cmd.startsWith(input.value.toLowerCase())
     );
 
     setSuggestionsList(suggestions);
@@ -188,6 +188,7 @@ function App() {
     }
 
     const command = input.value ?? '';
+    const commandToExecute = command.toLowerCase();
     const commandsEnteredUpdated = [...commandsEntered, command];
 
     handleCommandReset();
@@ -195,7 +196,7 @@ function App() {
     setTimeout(() => {
       scrollToBottom();
 
-      if (command === AvailableCommands.CV) {
+      if (commandToExecute === AvailableCommands.CV) {
         setMode(Mode.Output);
       }
 
@@ -263,7 +264,7 @@ function App() {
       {!isCommandInProgress && (
         <section className="App__results">
           {commandsEntered.map((command, index) => (
-            <Result command={command} key={index} />
+            <Result command={command.toLowerCase()} key={index} />
           ))}
         </section>
       )}
