@@ -85,7 +85,7 @@ export const useKeyboardHotkeys = ({
     return () => {
       window.removeEventListener('keydown', handleMultipleKeyPress);
     };
-  });
+  }, []);
 
   const handleKeyPress = () => {
     if (isCommandInProgress) {
@@ -101,5 +101,5 @@ export const useKeyboardHotkeys = ({
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  });
+  }, []);
 };

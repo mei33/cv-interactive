@@ -239,7 +239,7 @@ function App() {
         setTheme(themeUpdated);
       }
     }
-  }, [commandsEntered, isCommandInProgress]);
+  }, [commandsEntered, isCommandInProgress, mode, theme]);
 
   const handleCommandChange = (command: Command) => {
     lastCommand.current = command;
