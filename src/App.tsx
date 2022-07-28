@@ -53,6 +53,7 @@ function App() {
   const handleCommandReset = () => {
     entryRef.current.form()?.reset();
     setSuggestionsList([]);
+    setMode(Mode.Input);
   };
 
   const handleCommandSeek = (direction: SeekCommands) => {
