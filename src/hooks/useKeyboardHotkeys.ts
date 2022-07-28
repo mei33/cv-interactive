@@ -21,85 +21,89 @@ export const useKeyboardHotkeys = ({
   onCommandReset,
   onCommandSuggest,
 }: Params) => {
-  const handleNavigationKeyPress = ({ key }: KeyboardEvent) => {
-    if (isCommandInProgress) {
-      return;
-    }
-
-    switch (key) {
-      case 'ArrowUp':
-      case 'ArrowDown': {
-        const direction =
-          key === 'ArrowUp' ? SeekCommands.Prev : SeekCommands.Next;
-        onCommandSeek(direction);
-        return;
-      }
-
-      case 'ArrowLeft':
-      case 'ArrowRight': {
-        const direction =
-          key === 'ArrowLeft' ? CaretCommands.Prev : CaretCommands.Next;
-        onCaretMove(direction);
-        return;
-      }
-
-      case 'Tab': {
-        onCommandSuggest();
-        return;
-      }
-    }
-  };
-
   useEffect(() => {
+    const handleNavigationKeyPress = ({ key }: KeyboardEvent) => {
+      if (isCommandInProgress) {
+        return;
+      }
+
+      switch (key) {
+        case 'ArrowUp':
+        case 'ArrowDown': {
+          const direction =
+            key === 'ArrowUp' ? SeekCommands.Prev : SeekCommands.Next;
+          onCommandSeek(direction);
+          return;
+        }
+
+        case 'ArrowLeft':
+        case 'ArrowRight': {
+          const direction =
+            key === 'ArrowLeft' ? CaretCommands.Prev : CaretCommands.Next;
+          onCaretMove(direction);
+          return;
+        }
+
+        case 'Tab': {
+          onCommandSuggest();
+          return;
+        }
+      }
+    };
+
     window.addEventListener('keydown', handleNavigationKeyPress);
 
     return () => {
       window.removeEventListener('keydown', handleNavigationKeyPress);
     };
-  }, []);
+  }, [isCommandInProgress, onCaretMove, onCommandSeek, onCommandSuggest]);
 
-  const handleMultipleKeyPress = ({ key, ctrlKey, metaKey }: KeyboardEvent) => {
-    if (isCommandInProgress) {
-      return;
-    }
-
-    switch (key) {
-      case 'u': {
-        if (ctrlKey) {
-          onCommandReset();
-        }
+  useEffect(() => {
+    const handleMultipleKeyPress = ({
+      key,
+      ctrlKey,
+      metaKey,
+    }: KeyboardEvent) => {
+      if (isCommandInProgress) {
         return;
       }
 
-      case 'k': {
-        if (metaKey) {
-          onCommandsListClear();
+      switch (key) {
+        case 'u': {
+          if (ctrlKey) {
+            onCommandReset();
+          }
+          return;
+        }
+
+        case 'k': {
+          if (metaKey) {
+            onCommandsListClear();
+          }
         }
       }
-    }
-  };
+    };
 
-  useEffect(() => {
     window.addEventListener('keydown', handleMultipleKeyPress);
 
     return () => {
       window.removeEventListener('keydown', handleMultipleKeyPress);
     };
-  }, []);
-
-  const handleKeyPress = () => {
-    if (isCommandInProgress) {
-      return;
-    }
-
-    onInput();
-  };
+  }, [isCommandInProgress, onCommandReset, onCommandsListClear]);
 
   useEffect(() => {
+    const handleKeyPress = () => {
+      if (isCommandInProgress) {
+        return;
+      }
+
+      onInput();
+    };
+
     window.addEventListener('keydown', handleKeyPress);
 
     return () => {
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, []);
+  }, [isCommandInProgress, onInput]);
 };
